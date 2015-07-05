@@ -10,9 +10,6 @@ This file contains the first test case of Vulpes.
 #include "vulpes.hpp"
 #include <vector>
 
-using namespace std;
-
-
 int main(int argc, const char * argv[]) {
 
     // An available Metal device is retrieved.
@@ -23,12 +20,12 @@ int main(int argc, const char * argv[]) {
     
     // Host vectors are allocated.
     unsigned len = 1025;
-    vector<int> vhost1(len);
-    vector<int> vhost2(len);
+    std::vector<int> vhost1(len);
+    std::vector<int> vhost2(len);
     
     // Host vector whose data is written from memory is  allocated.
     // This data should be page aligned. This makes 'NO' GPU to CPU memory copy.
-    vector<int,aligned_allocator<int>> vhost3(len);
+    std::vector<int,aligned_allocator<int>> vhost3(len);
     
     // Host data is generated.
     for(unsigned i=0;i<len;i++){
@@ -47,7 +44,7 @@ int main(int argc, const char * argv[]) {
     vulpes::vcopy(vhost2.begin(), vhost2.end(), vdevice2, device);
     
     // Metal source is generated
-    string src = METAL_SRC(kernel void add(const device int *In1 [[buffer(0)]],
+    std::string src = METAL_SRC(kernel void add(const device int *In1 [[buffer(0)]],
                                            const device int *In2 [[buffer(1)]],
                                            device int *Out [[buffer(2)]],
                                            uint tid [[thread_position_in_grid]]){
