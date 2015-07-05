@@ -1,2 +1,2 @@
 # Vulpes
-Vulpes is C++ STL Library for Metal Programming on GPUs for iOS and OS X.
+Vulpes is C++ STL library for Metal Programming on iOS and Mac OS X GPUs
