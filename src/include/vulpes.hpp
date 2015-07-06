@@ -20,5 +20,8 @@
 #include "./vulpes/allocator.hpp"
 #include "./vulpes/algorithm.hpp"
 #include "./vulpes/program.hpp"
+#include "./vulpes/functional.hpp"
+
+#define METAL_SRC(src) "#include<metal_stdlib>\n using namespace metal;\n"#src
 
 #endif /* vulpes_hpp */
