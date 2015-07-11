@@ -20,7 +20,6 @@ namespace vulpes{
         id<MTLFunction> _function;
         id<MTLComputePipelineState> compute_pipeline_state;
         id<MTLCommandQueue> queue;
-        
     public:
         program(){}
         
@@ -48,17 +47,18 @@ namespace vulpes{
             NSString *src = [NSString stringWithCString:_src.c_str() encoding:[NSString defaultCStringEncoding]];
             set_library(src);
         }
-
         template<typename T>
         void set_args(uint pos, uint _offset, vulpes::vector<T> &vec){
             [command_encoder setBuffer:vec.get_buffer() offset:_offset atIndex:pos];
         }
         
+        void set_args(uint pos, uint _offset, id<MTLBuffer> buffer){
+            [command_encoder setBuffer:buffer offset:_offset atIndex:pos];
+        }
         
         void set_function(NSString *_name){
             _function = [library newFunctionWithName:_name];
         }
-        
         
         void build(){
             NSError *errors;
@@ -106,7 +106,6 @@ namespace vulpes{
             _program.set_args(pos, offset, vec);
         }
     };
-
 }
 
 #endif /* program_hpp */
