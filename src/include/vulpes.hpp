@@ -21,6 +21,7 @@
 #include "./vulpes/algorithm.hpp"
 #include "./vulpes/program.hpp"
 #include "./vulpes/functional.hpp"
+#include "./vulpes/iterator.hpp"
 
 #define METAL_SRC(src) "#include<metal_stdlib>\n using namespace metal;\n"#src
 
