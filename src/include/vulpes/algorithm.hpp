@@ -15,17 +15,18 @@
 
 namespace vulpes{
     
-    template<typename T , typename U>
-    void transform(vulpes::vector<T>& First, size_t len, vulpes::vector<T>& Second, vulpes::vector<U>& Third,
+    static void transform(vulpes::Iterator FirstStart, vulpes::Iterator FirstEnd, vulpes::Iterator Second, vulpes::Iterator Third,
                           vulpes::functional _functional){
-        device _device = First.get_device();
+        device _device = FirstStart.get_device();
         command_queue queue(_device);
         program _program = vulpes::create_with_source(_functional.get_source(), _device, queue);
         function _function(_program, _functional.get_name());
         _program.build();
-        _function.set_arg(0, 0, First);
-        _function.set_arg(1, 0, Second);
-        _function.set_arg(2, 0, Third);
+        _program.set_args(0, 0, FirstStart.get_buffer());
+        _program.set_args(1, 0, Second.get_buffer());
+        _program.set_args(2, 0, Third.get_buffer());
+        
+        size_t len = FirstEnd.get_size()/FirstStart.get_element_size();
         
         if(len < 512){
             _program.run({1,1,1},{len,1,1});
@@ -34,16 +35,17 @@ namespace vulpes{
         }
     }
     
-    template<typename T>
-    void transform(vulpes::vector<T>& First, size_t len, vulpes::vector<T>& Second,
+    void transform(vulpes::Iterator FirstStart, vulpes::Iterator FirstEnd, vulpes::Iterator Second,
                    vulpes::functional _functional){
-        device _device = First.get_device();
+        device _device = FirstStart.get_device();
         command_queue queue(_device);
         program _program = vulpes::create_with_source(_functional.get_source(), _device, queue);
         function _function(_program, _functional.get_name());
         _program.build();
-        _function.set_arg(0, 0, First);
-        _function.set_arg(1, 0, Second);
+        _program.set_args(0, 0, FirstStart.get_buffer());
+        _program.set_args(1, 0, Second.get_buffer());
+        
+        size_t len = FirstEnd.get_size()/FirstStart.get_element_size();
         
         if(len < 512){
             _program.run({1,1,1},{len,1,1});
