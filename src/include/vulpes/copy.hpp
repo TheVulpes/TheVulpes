@@ -11,15 +11,16 @@
 #include "device.hpp"
 
 namespace vulpes{
-        template<class InputIterator, class OutputIterator>
-        void vcopy(const InputIterator &first,
-                        const InputIterator &end,
-                        OutputIterator &dbegin,
-                        device _device){
+        template<class InputIterator>
+        void copy(const InputIterator &first,
+                  const InputIterator &end,
+                            Iterator third,
+                            device _device){
             size_t oldsize = &(*end) - &(*first);
             oldsize *= sizeof(end);
             void *array = &(*first);
-            dbegin.htod(array,oldsize,_device);
+            __strong id<MTLBuffer> *bufptr = third.get_bufptr();
+            *bufptr = [_device.get_device() newBufferWithBytes:array length:third.get_size() options:0];
         }
 }
 
