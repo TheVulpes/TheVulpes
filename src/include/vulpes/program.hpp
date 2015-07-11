@@ -5,105 +5,83 @@
 //  Copyright © 2015 Aditya Atluri. All rights reserved.
 //
 
-#ifndef program_hpp
-#define program_hpp
+#ifndef vector_hpp
+#define vector_hpp
 
 #include "device.hpp"
+#include "allocator.hpp"
+#include "iterator.hpp"
+#include <vector>
 
 namespace vulpes{
-    class program{
-    private:
-        id<MTLDevice> _device;
-        id<MTLLibrary> library;
-        id<MTLCommandBuffer> command_buffer;
-        id<MTLComputeCommandEncoder> command_encoder;
-        id<MTLFunction> _function;
-        id<MTLComputePipelineState> compute_pipeline_state;
-        id<MTLCommandQueue> queue;
-    public:
-        program(){}
-        
-        program(device __device){
-            _device = __device.get_device();
-        }
-        
-        void set_command_buffer(command_queue _queue){
-            queue = _queue.get_queue();
-            command_buffer = [queue commandBuffer];
-        }
-        
-        
-        void set_command_encoder(){
-            command_encoder = [command_buffer computeCommandEncoder];
-        }
-        
-        void set_library(NSString *src){
-            NSError *errors;
-            library = [_device newLibraryWithSource:src options:0 error:&errors];
-        }
-        
-        
-        void create_with_source(std::string _src){
-            NSString *src = [NSString stringWithCString:_src.c_str() encoding:[NSString defaultCStringEncoding]];
-            set_library(src);
-        }
-        template<typename T>
-        void set_args(uint pos, uint _offset, vulpes::vector<T> &vec){
-            [command_encoder setBuffer:vec.get_buffer() offset:_offset atIndex:pos];
-        }
-        
-        void set_args(uint pos, uint _offset, id<MTLBuffer> buffer){
-            [command_encoder setBuffer:buffer offset:_offset atIndex:pos];
-        }
-        
-        void set_function(NSString *_name){
-            _function = [library newFunctionWithName:_name];
-        }
-        
-        void build(){
-            NSError *errors;
-            compute_pipeline_state = [_device newComputePipelineStateWithFunction:_function error:&errors];
-            if(errors){
-                std::cout<<"Errors"<<std::endl;
-            }
-            [command_encoder setComputePipelineState:compute_pipeline_state];
-        }
-        
-        
-        void run(vec3 threadgroups, vec3 threads){
-            MTLSize numThreadgroups = {threadgroups.x, threadgroups.y, threadgroups.z};
-            MTLSize threadsPerGroup = {threads.x, threads.y, threads.z};
-            [command_encoder dispatchThreadgroups:numThreadgroups threadsPerThreadgroup:threadsPerGroup];
-            [command_encoder endEncoding];
-            [command_buffer commit];
-            [command_buffer waitUntilCompleted];
-        }
-    };
-    
-    static program create_with_source(std::string _src, device __device, command_queue __queue){
-        program _program(__device);
-        _program.create_with_source(_src);
-        _program.set_command_buffer(__queue);
-        _program.set_command_encoder();
-        return _program;
-    }
 
-    class function{
+    
+    template<typename T>
+    class vector{
     private:
-        program _program;
-        NSString *_name;
+        size_t len;
+        device _device;
+        size_t size;
+        id<MTLBuffer> buffer;
+        T *hostptr;
     public:
-        function(program &__program, std::string __name){
-            NSString *name = [NSString stringWithCString:__name.c_str() encoding:[NSString defaultCStringEncoding]];
-            _name = name;
-            _program = __program;
-            __program.set_function(name);
-            __program.build();
-            
+        vector(size_t _len, device __device){
+            len = _len;
+            _device = __device;
+            size = sizeof(T)*len;
+            hostptr = NULL;
         }
-        template<typename T>
-        void set_arg(uint pos, uint offset, vulpes::vector<T> &vec){
-            _program.set_args(pos, offset, vec);
+        vector(std::vector<T> &host, device __device){
+            len = host.size();
+            size = sizeof(T) * len;
+            hostptr = &host[0];
+            _device = __device;
+            buffer = [__device.get_device() newBufferWithBytes:&host[0] length:size options:0];
+        }
+        vector(std::vector<T,aligned_allocator<T>> &host){
+            len = host.size();
+            size = sizeof(T) * len;
+            if(size%4096 > 0){
+                size = ((size/4096)+1)*4096;
+            }
+            hostptr = &host[0];
+            buffer = [_device.get_device() newBufferWithBytesNoCopy:&host[0] length:size options:0 deallocator:nil];
+        }
+        vector(std::vector<T,aligned_allocator<T>> &host, device __device){
+            len = host.size();
+            _device = __device;
+            size = sizeof(T) * len;
+            if(size%4096 > 0){
+                size = ((size/4096)+1)*4096;
+            }
+            hostptr = &host[0];
+            buffer = [__device.get_device() newBufferWithBytesNoCopy:&host[0] length:size options:0 deallocator:nil];
+        }
+        vector(T* start, T* end){
+            hostptr = start;
+            len = end - start;
+            size = sizeof(T)*len;
+            buffer = [_device.get_device() newBufferWithBytes:start length:size options:0];
+        }
+        Iterator begin(){
+            vulpes::Iterator _iterator(_device, &buffer, hostptr, sizeof(T), size);
+            return _iterator;
+        }
+        
+        Iterator end(){
+            vulpes::Iterator _iterator;
+            _iterator.set_size(size);
+            return _iterator;
+        }
+        id<MTLBuffer> get_buffer(){
+            return buffer;
+        }
+        void htod(void* array, size_t size, device &_device){
+            hostptr = array;
+            buffer = [_device.get_device() newBufferWithBytes:array length:size options:0];
+        }
+        device get_device(){
+            return _device;
         }
     };
 }
