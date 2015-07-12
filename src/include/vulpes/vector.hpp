@@ -118,7 +118,7 @@ namespace vulpes{
             return Size;
         }
         T at(size_t id){
-            if(i < len){
+            if(id < len){
                 return *(hostptr+id);
             }
             throw std::out_of_range("vulpes::vector: Cannot access element, out of range");
