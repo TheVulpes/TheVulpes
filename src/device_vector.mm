@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]) {
   std::vector<int>H(4);
   
   // Assigning values to the vector
-  for(unsigned i=0;i<H.size();i++){
+  for(unsigned i=0; i < H.size(); i++){
     H[i] = 1;
   }
   
@@ -29,9 +29,23 @@ int main(int argc, const char * argv[]) {
   D[0] = 2;
   
   // Printing out the device vector
-  for(unsigned i=0;i<E.size();i++){
-    std::cout<<E[i]<<std::endl;
+  for(unsigned i=0; i < E.size(); i++){
+    std::cout<< E[i] <<std::endl;
   }
+  
+  // Prints out maximum size a vector can hold in bytes.
+  std::cout<< E.max_size() <<std::endl;
+  
+  // Current size of vector in byes.
+  std::cout<< E.capacity() <<std::endl;
+  
+  // Length of the vector
+  std::cout<< E.size() <<std::endl;
+
+  // Trying to access elements out of vector range.
+  // Throws out of bound exception
+  std::cout<< E[4] <<std::endl;
+  std::cout<< E.at(4) <<std::endl;
   
   return 0;
 }
