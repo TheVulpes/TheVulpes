@@ -64,31 +64,6 @@ namespace vulpes{
             _program.run({len/512,1,1}, {512,1,1});
         }
     }
-    template<typename InputIterator,
-            typename T>
-    void fill(InputIterator Start,
-              InputIterator End,
-              T value){
-        // Finish Fill
-    }
-    
-    template<typename InputInterator,
-                typename T>
-    void sequence(InputInterator Start,
-                  InputInterator End,
-                  T id, T value){
-    }
-    
-    template<typename InputIterator>
-    void sequence(InputIterator Start,
-                  InputIterator End){
-    }
-    
-    template<typename InputIterator,
-                typename T>
-    void replace(InputIterator Start, InputIterator End,
-                 T id, T value){
-    }
 }
 
 #endif /* algorithm_hpp */
