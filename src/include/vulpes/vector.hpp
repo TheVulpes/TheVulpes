@@ -23,6 +23,7 @@ namespace vulpes{
         id<MTLBuffer> buffer;
         T *hostptr;
     public:
+        vector(){}
         vector(size_t _len, device __device){
             len = _len;
             _device = __device;
@@ -35,6 +36,12 @@ namespace vulpes{
             hostptr = &host[0];
             _device = __device;
             buffer = [__device.get_device() newBufferWithBytes:&host[0] length:size options:0];
+        }
+        vector(std::vector<T> &host){
+            len = host.size();
+            size = sizeof(T) * len;
+            hostptr = &host[0];
+            buffer = [_device.get_device() newBufferWithBytes:&host[0] length:size options:0];
         }
         vector(std::vector<T,aligned_allocator<T>> &host){
             len = host.size();
@@ -61,14 +68,20 @@ namespace vulpes{
             size = sizeof(T)*len;
             buffer = [_device.get_device() newBufferWithBytes:start length:size options:0];
         }
-        Iterator begin(){
-            vulpes::Iterator _iterator(_device, &buffer, hostptr, sizeof(T), size);
+        vector(size_t _len, T value){
+            len = _len;
+            size = sizeof(T)*len;
+            std::vector<T> host(_len, value);
+            hostptr = &host[0];
+            buffer = [_device.get_device() newBufferWithBytes:&host[0] length:size options:0];
+        }
+        Iterator<T> begin(){
+            vulpes::Iterator<T> _iterator(_device, &buffer, hostptr, sizeof(T), size);
             return _iterator;
         }
         
-        Iterator end(){
-            vulpes::Iterator _iterator;
-            _iterator.set_size(size);
+        Iterator<T> end(){
+            vulpes::Iterator<T> _iterator(_device, &buffer, (T*)hostptr+len, sizeof(T), size);
             return _iterator;
         }
         id<MTLBuffer> get_buffer(){
@@ -80,6 +93,13 @@ namespace vulpes{
         }
         device get_device(){
             return _device;
+        }
+        vulpes::vector<T>& operator=(std::vector<T>& rhs){
+            vector<T> lhs(rhs);
+            return lhs;
+        }
+        T& operator[](int id){
+            return *(hostptr+id);
         }
     };
 }
