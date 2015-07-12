@@ -21,12 +21,16 @@ int main(int argc, const char * argv[]) {
   // Creating a device vector and copying data to it from host vector
   vulpes::vector<int> D = H;
   
+  // Creating a device vector and passing vector D's reference to it.
+  // This creates a new vector E with same parameters as D.
+  vulpes::vector<int> E = D;
+  
   // Changing value of an element in device vector
   D[0] = 2;
   
   // Printing out the device vector
-  for(unsigned i=0;i<D.size();i++){
-    std::cout<<D[i]<<std::endl;
+  for(unsigned i=0;i<E.size();i++){
+    std::cout<<E[i]<<std::endl;
   }
   
   return 0;
