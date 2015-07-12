@@ -3,6 +3,7 @@
 //  Copyright © 2015 Aditya Atluri. All rights reserved.
 //
 
+
 #ifndef iterator_hpp
 #define iterator_hpp
 
@@ -10,21 +11,22 @@
 #include "vector.hpp"
 
 namespace vulpes{
+    template<typename T>
     class Iterator{
     private:
         id<MTLBuffer> buffer;
         __strong id<MTLBuffer> *bufptr;
-        void* hostptr;
+        T* hostptr;
         size_t size;
         device _device;
-        size_t T;
+        size_t single;
     public:
-        Iterator(device __device,__strong id<MTLBuffer> *_buffer, void* _hostptr, size_t _T, size_t _size){
+        Iterator(device __device,__strong id<MTLBuffer> *_buffer, T* _hostptr, size_t _single, size_t _size){
             buffer = *_buffer;
             bufptr = _buffer;
             hostptr = _hostptr;
             _device = __device;
-            T = _T;
+            single = _single;
             size = _size;
         }
         Iterator(){}
@@ -36,14 +38,14 @@ namespace vulpes{
         void set_device(device &__device){
             _device = __device;
         }
-        void set_hostptr(void *_hostptr){
+        void set_hostptr(T *_hostptr){
             hostptr = _hostptr;
         }
         void set_size(size_t _size){
             size = _size;
         }
-        void set_element_size(size_t _T){
-            T = _T;
+        void set_element_size(size_t _single){
+            single = _single;
         }
         void set_buffer(id<MTLBuffer> _buffer){
             buffer = _buffer;
@@ -55,9 +57,9 @@ namespace vulpes{
             return bufptr;
         }
         size_t get_element_size(){
-            return T;
+            return single;
         }
-        void* get_hostptr(){
+        T* get_hostptr(){
             return hostptr;
         }
         
@@ -68,8 +70,12 @@ namespace vulpes{
         device get_device(){
             return _device;
         }
-        
     };
+    template<typename T>
+    Iterator<T> operator+(Iterator<T> In,const T id){
+        In.set_hostptr(In.get_hostptr() + id);
+        return In;
+    }
 }
 
 #endif
