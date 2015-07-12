@@ -14,9 +14,15 @@
 #include "vector.hpp"
 
 namespace vulpes{
-    
-    static void transform(vulpes::Iterator FirstStart, vulpes::Iterator FirstEnd, vulpes::Iterator Second, vulpes::Iterator Third,
-                          vulpes::functional _functional){
+    template<typename InputIterator,
+                typename SecondIterator,
+                typename OutputIterator,
+                typename BinaryOp>
+    void transform(InputIterator FirstStart,
+                   InputIterator FirstEnd,
+                   SecondIterator Second,
+                   OutputIterator Third,
+                   BinaryOp _functional){
         device _device = FirstStart.get_device();
         command_queue queue(_device);
         program _program = vulpes::create_with_source(_functional.get_source(), _device, queue);
@@ -35,8 +41,13 @@ namespace vulpes{
         }
     }
     
-    void transform(vulpes::Iterator FirstStart, vulpes::Iterator FirstEnd, vulpes::Iterator Second,
-                   vulpes::functional _functional){
+    template<typename InputIterator,
+                typename OutputIterator,
+                typename UnaryOp>
+    void transform(InputIterator FirstStart, // InputIterator is vulpes::Iterator<T>
+                   InputIterator FirstEnd,
+                   OutputIterator Second,
+                   UnaryOp _functional){
         device _device = FirstStart.get_device();
         command_queue queue(_device);
         program _program = vulpes::create_with_source(_functional.get_source(), _device, queue);
@@ -53,7 +64,31 @@ namespace vulpes{
             _program.run({len/512,1,1}, {512,1,1});
         }
     }
+    template<typename InputIterator,
+            typename T>
+    void fill(InputIterator Start,
+              InputIterator End,
+              T value){
+        // Finish Fill
+    }
+    
+    template<typename InputInterator,
+                typename T>
+    void sequence(InputInterator Start,
+                  InputInterator End,
+                  T id, T value){
+    }
+    
+    template<typename InputIterator>
+    void sequence(InputIterator Start,
+                  InputIterator End){
+    }
+    
+    template<typename InputIterator,
+                typename T>
+    void replace(InputIterator Start, InputIterator End,
+                 T id, T value){
+    }
 }
 
 #endif /* algorithm_hpp */
-
