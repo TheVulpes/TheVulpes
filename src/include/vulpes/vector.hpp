@@ -102,10 +102,26 @@ namespace vulpes{
             return rhs;
         }
         T& operator[](int id){
-            return *(hostptr+id);
+            if(id < len){
+                return *(hostptr+id);
+            }
+            throw std::out_of_range("vulpes::vector: Cannot access element, out of range");
         }
         size_t size(){
             return len;
+        }
+        size_t max_size(){
+            // 256 MB
+            return 1024*1024*256;
+        }
+        size_t capacity(){
+            return Size;
+        }
+        T at(size_t id){
+            if(i < len){
+                return *(hostptr+id);
+            }
+            throw std::out_of_range("vulpes::vector: Cannot access element, out of range");
         }
     };
 }
