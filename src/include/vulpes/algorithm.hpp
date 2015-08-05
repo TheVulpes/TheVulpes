@@ -64,6 +64,31 @@ namespace vulpes{
             _program.run({len/512,1,1}, {512,1,1});
         }
     }
+    
+    template<typename InputIterator,
+            typename T>
+    void fill(InputIterator Start,
+              InputIterator End,
+              T value){
+        device _device = Start.get_device();
+        command_queue queue(_device);
+        functional _fill = get_fill<T>();
+        program _program = vulpes::create_with_source(_fill.get_source(), _device, queue);
+        function _function(_program, _fill.get_name());
+        _program.build();
+        T A[1] = {value};
+        id<MTLBuffer> buffer= [_device.get_device() newBufferWithBytes:A length:sizeof(A) options:0];
+        _program.set_args(0, 0, buffer);
+        _program.set_args(1, 0, Start.get_buffer());
+        
+        size_t len = End.get_hostptr() - Start.get_hostptr();
+        
+        if(len < 512){
+            _program.run({1,1,1},{len,1,1});
+        }else{
+            _program.run({len/512,1,1}, {512,1,1});
+        }
+    }
 }
 
 #endif /* algorithm_hpp */
