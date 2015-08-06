@@ -648,7 +648,7 @@ namespace vulpes{
     }
     
     
-        template<typename T>
+    template<typename T>
     functional get_fill(){
         std::string src = "#include<metal_stdlib>\n using namespace metal;\n";
         std::string name = "functional_fill";
@@ -733,7 +733,7 @@ namespace vulpes{
         return _functional;
     }
     
-        template<typename T>
+    template<typename T>
     functional get_replace(){
         std::string src = "#include<metal_stdlib>\n using namespace metal;\n";
         std::string name = "functional_replace";
@@ -845,6 +845,102 @@ namespace vulpes{
             if(Out[tid] == key[0]){ \n \
             Out[tid] = value[0]; \n \
             } \n \
+            }";
+        }
+        functional _functional(src, name);
+        return _functional;
+    }
+    
+    template<typename T>
+    functional get_sequence(){
+        std::string src = "#include<metal_stdlib>\n using namespace metal;\n";
+        std::string name = "functional_seq";
+        if(std::is_same<T, char>::value){
+            src += "kernel void functional_seq(device char* Out[[buffer(0)]], \n \
+                                                device char* Init[[buffer(1)]], \n \
+                                                device char* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, unsigned char>::value){
+            src += "kernel void functional_seq(device unsigned char* Out[[buffer(0)]], \n \
+                                                device unsigned char* Init[[buffer(1)]], \n \
+                                                device unsigned char* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, short>::value){
+            src += "kernel void functional_seq(device short* Out[[buffer(0)]], \n \
+                                                device short* Init[[buffer(1)]], \n \
+                                                device short* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, unsigned short>::value){
+            src += "kernel void functional_seq(device unsigned short* Out[[buffer(0)]], \n \
+                                                device unsigned short* Init[[buffer(1)]], \n \
+                                                device unsigned short* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, ushort>::value){
+            src += "kernel void functional_seq(device ushort* Out[[buffer(0)]], \n \
+                                                device ushort* Init[[buffer(1)]], \n \
+                                                device ushort* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, int>::value){
+            src += "kernel void functional_seq(device int* Out[[buffer(0)]], \n \
+                                                device int* Init[[buffer(1)]], \n \
+                                                device int* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, unsigned int>::value){
+            src += "kernel void functional_seq(device unsigned int* Out[[buffer(0)]], \n \
+                                                device unsigned int* Init[[buffer(1)]], \n \
+                                                device unsigned int* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, uint>::value){
+            src += "kernel void functional_seq(device uint* Out[[buffer(0)]], \n \
+                                                device uint* Init[[buffer(1)]], \n \
+                                                device uint* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, float>::value){
+            src += "kernel void functional_seq(device float* Out[[buffer(0)]], \n \
+                                                device float* Init[[buffer(1)]], \n \
+                                                device float* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, size_t>::value){
+            src += "kernel void functional_seq(device size_t* Out[[buffer(0)]], \n \
+                                                device size_t* Init[[buffer(1)]], \n \
+                                                device size_t* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
+            }";
+        }
+        if(std::is_same<T, ptrdiff_t>::value){
+            src += "kernel void functional_seq(device ptrdiff_t* Out[[buffer(0)]], \n \
+                                                device ptrdiff_t* Init[[buffer(1)]], \n \
+                                                device ptrdiff_t* Step[[buffer(2)]], \n \
+                                                uint tid [[thread_position_in_grid]]){ \n \
+                        Out[tid] = tid * Step[0] + Init[0]; \n \
             }";
         }
         functional _functional(src, name);
