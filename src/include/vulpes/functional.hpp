@@ -732,6 +732,124 @@ namespace vulpes{
         functional _functional(src, name);
         return _functional;
     }
+    
+        template<typename T>
+    functional get_replace(){
+        std::string src = "#include<metal_stdlib>\n using namespace metal;\n";
+        std::string name = "functional_replace";
+        if(std::is_same<T, char>::value){
+            src += "kernel void functional_replace(device char* Out[[buffer(0)]], \n \
+            device char* key[[buffer(1)], \n \
+            device char* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, unsigned char>::value){
+            src += "kernel void functional_replace(device unsigned char* Out[[buffer(0)]], \n \
+            device unsigned char* key[[buffer(1)], \n \
+            device unsigned char* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, short>::value){
+            src += "kernel void functional_replace(device short* Out[[buffer(0)]], \n \
+            device short* key[[buffer(1)]], \n \
+            device short* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, unsigned short>::value){
+            src += "kernel void functional_replace(device unsigned short* Out[[buffer(0)]], \n \
+            device unsigned short* key[[buffer(1)]], \n \
+            device unsigned short* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, ushort>::value){
+            src += "kernel void functional_replace(device ushort* Out[[buffer(0)]], \n \
+            device ushort* key[[buffer(1)]], \n \
+            device ushort* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, int>::value){
+            src += "kernel void functional_replace(device int* Out[[buffer(0)]], \n \
+            device int* key[[buffer(1)]], \n \
+            device int* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, unsigned int>::value){
+            src += "kernel void functional_replace(device unsigned int* Out[[buffer(0)]], \n \
+            device unsigned int* key[[buffer(1)]], \n \
+            device unsigned int* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, uint>::value){
+            src += "kernel void functional_replace(device uint* Out[[buffer(0)]], \n \
+            device uint* key[[buffer(1)]], \n \
+            device uint* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, float>::value){
+            src += "kernel void functional_replace(device float* Out[[buffer(0)]], \n \
+            device float* key[[buffer(1)]], \n \
+            device float* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, size_t>::value){
+            src += "kernel void functional_replace(device size_t* Out[[buffer(0)]], \n \
+            device size_t* key[[buffer(1)]], \n \
+            device size_t* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        if(std::is_same<T, ptrdiff_t>::value){
+            src += "kernel void functional_replace(device ptrdiff_t* Out[[buffer(0)]], \n \
+            device ptrdiff_t* key[[buffer(1)]], \n \
+            device ptrdiff_t* value[[buffer(2)]], \n \
+            uint tid [[thread_position_in_grid]]){ \n \
+            if(Out[tid] == key[0]){ \n \
+            Out[tid] = value[0]; \n \
+            } \n \
+            }";
+        }
+        functional _functional(src, name);
+        return _functional;
+    }
 };
 
 
