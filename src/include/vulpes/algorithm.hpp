@@ -89,6 +89,33 @@ namespace vulpes{
             _program.run({len/512,1,1}, {512,1,1});
         }
     }
+    
+    template<typename InputIterator,
+            typename T>
+    void replace(InputIterator Start, InputIterator End,
+                 T key, T value){
+        device _device = Start.get_device();
+        command_queue queue(_device);
+        functional _replace = get_replace<T>();
+        program _program = vulpes::create_with_source(_replace.get_source(), _device, queue);
+        function _function(_program, _replace.get_name());
+        _program.build();
+        T A[1] = {key};
+        T B[1] = {value};
+        id<MTLBuffer> buffer1 = [_device.get_device() newBufferWithBytes:A length:sizeof(A) options:0];
+        id<MTLBuffer> buffer2 = [_device.get_device() newBufferWithBytes:B length:sizeof(B) options:0];
+        
+        _program.set_args(0, 0, Start.get_buffer());
+        _program.set_args(1, 0, buffer1);
+        _program.set_args(2, 0, buffer2);
+        size_t len = End.get_hostptr() - Start.get_hostptr();
+        
+        if(len < 512){
+            _program.run({1,1,1},{len,1,1});
+        }else{
+            _program.run({len/512,1,1}, {512,1,1});
+        }
+    }
 }
 
 #endif /* algorithm_hpp */
