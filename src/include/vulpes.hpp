@@ -15,7 +15,7 @@
 #include "./vulpes/system.hpp"
 #include "./vulpes/library.hpp"
 #include "./vulpes/command_queue.hpp"
-#include "./vulpes/vector.hpp"
+#include "./vulpes/container.hpp"
 #include "./vulpes/copy.hpp"
 #include "./vulpes/allocator.hpp"
 #include "./vulpes/algorithm.hpp"
