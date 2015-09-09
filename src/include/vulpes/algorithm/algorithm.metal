@@ -520,14 +520,14 @@ kernel void functional_sqrt_uint(const device uint* In1[[buffer(0)]],
                             uint tid [[thread_position_in_grid]]){
     Out[tid] = sqrt(In1[tid]);
 }
-
+*/
 kernel void functional_sqrt_float(const device float* In1[[buffer(0)]],
                             device float* Out[[buffer(1)]],
                             uint tid [[thread_position_in_grid]]){
     Out[tid] = sqrt(In1[tid]);
 }
 
-*/
+
 /*
  All the fills start here!
  */
