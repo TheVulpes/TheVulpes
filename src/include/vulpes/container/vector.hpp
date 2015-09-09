@@ -8,9 +8,9 @@
 #ifndef vector_hpp
 #define vector_hpp
 
-#include "device.hpp"
-#include "allocator.hpp"
-#include "iterator.hpp"
+#include "../device.hpp"
+#include "../allocator.hpp"
+#include "../iterator.hpp"
 #include <vector>
 
 namespace vulpes{
@@ -127,3 +127,5 @@ namespace vulpes{
 }
 
 #endif /* vector_hpp */
+
+

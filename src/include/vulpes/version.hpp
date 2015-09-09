@@ -8,7 +8,7 @@
 #ifndef version_hpp
 #define version_hpp
 
-#define VULPES_VERSION 10010
+#define VULPES_VERSION 11000
 //  Two digits for every version from right
 /*  XYYZZ
 X = Major Version, 
